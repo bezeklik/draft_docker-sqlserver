@@ -1,3 +1,4 @@
+# https://github.com/Microsoft/mssql-docker/blob/master/linux/preview/CentOS/Dockerfile
 FROM centos:7
 
 ### Atomic/OpenShift Labels - https://github.com/projectatomic/ContainerApplicationGenericLabels
