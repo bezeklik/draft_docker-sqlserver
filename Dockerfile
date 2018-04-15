@@ -16,11 +16,23 @@ LABEL name="microsoft/mssql-server-linux" \
       io.k8s.description="MS SQL Server is ....." \
       io.k8s.display-name="MS SQL Server"
 
-# Install latest mssql-server package
-RUN curl -o /etc/yum.repos.d/mssql-server.repo https://packages.microsoft.com/config/rhel/7/mssql-server-2017.repo && \
-    curl -o /etc/yum.repos.d/msprod.repo https://packages.microsoft.com/config/rhel/7/prod.repo && \
-    ACCEPT_EULA=Y yum install -y mssql-server mssql-tools unixODBC-devel && \
-    yum clean all
+RUN yum --assumeyes install yum-utils && \
+    yum-config-manager --add-repo https://packages.microsoft.com/config/rhel/7/mssql-server.repo && \
+    sed -i 's/packages-microsoft-com-//' /etc/yum.repos.d/mssql-server.repo && \
+    ACCEPT_EULA=Y \
+    MSSQL_SA_PASSWORD='P@ssw0rd' \
+    MSSQL_PID=Developer \
+    MSSQL_LCID=1041 \
+    yum --assumeyes install mssql-server unixODBC-devel && \
+#    /opt/mssql/bin/mssql-conf -n setup && \
+    yum --assumeyes install https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm && \
+    ACCEPT_EULA=Y \
+    yum --assumeyes install mssql-tools && \
+    ln -sv /opt/mssql-tools/bin/* /usr/local/bin/ && \
+    yum --assumeyes install epel-release && \
+    yum --assumeyes install libunwind libicu python-pip  && \
+    pip install mssql-cli && \
+    rm -rf /var/cache/yum
 
 COPY entrypoint.sh /opt/mssql-tools/bin/
 ENV PATH=${PATH}:/opt/mssql/bin:/opt/mssql-tools/bin
