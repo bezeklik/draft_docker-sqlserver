@@ -22,7 +22,7 @@ RUN curl -o /etc/yum.repos.d/mssql-server.repo https://packages.microsoft.com/co
     ACCEPT_EULA=Y yum install -y mssql-server mssql-tools unixODBC-devel && \
     yum clean all
 
-COPY uid_entrypoint /opt/mssql-tools/bin/
+COPY entrypoint.sh /opt/mssql-tools/bin/
 ENV PATH=${PATH}:/opt/mssql/bin:/opt/mssql-tools/bin
 RUN mkdir -p /var/opt/mssql/data && \
     chmod -R g=u /var/opt/mssql /etc/passwd
@@ -36,6 +36,6 @@ EXPOSE 1433
 VOLUME /var/opt/mssql/data
 
 ### user name recognition at runtime w/ an arbitrary uid - for OpenShift deployments
-ENTRYPOINT ["uid_entrypoint"]
+ENTRYPOINT ["entrypoint.sh"]
 
 CMD sqlservr
