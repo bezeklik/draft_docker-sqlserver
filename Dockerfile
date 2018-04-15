@@ -19,7 +19,7 @@ LABEL name="microsoft/mssql-server-linux" \
 
 RUN yum --assumeyes install yum-utils && \
     yum-config-manager --add-repo https://packages.microsoft.com/config/rhel/7/mssql-server-2017.repo && \
-    sed -i 's/packages-microsoft-com-//' /etc/yum.repos.d/mssql-server.repo && \
+    sed -i 's/packages-microsoft-com-//' /etc/yum.repos.d/mssql-server-2017.repo && \
     ACCEPT_EULA=Y \
     MSSQL_SA_PASSWORD='P@ssw0rd' \
     MSSQL_PID=Developer \
