@@ -1,14 +1,14 @@
 # https://github.com/Microsoft/mssql-docker/blob/master/linux/preview/CentOS/Dockerfile
 FROM centos:7
 
-### Atomic/OpenShift Labels - https://github.com/projectatomic/ContainerApplicationGenericLabels
+# Atomic/OpenShift Labels - https://github.com/projectatomic/ContainerApplicationGenericLabels
 LABEL name="microsoft/mssql-server-linux" \
       vendor="Microsoft" \
       version="14.0" \
       release="1" \
       summary="MS SQL Server" \
       description="MS SQL Server is ....." \
-### Required labels above - recommended below
+# Required labels above - recommended below
       url="https://www.microsoft.com/en-us/sql-server/" \
       run='docker run --name ${NAME} \
         -e ACCEPT_EULA=Y -e SA_PASSWORD=yourStrong@Password \
@@ -40,15 +40,14 @@ ENV PATH=${PATH}:/opt/mssql/bin:/opt/mssql-tools/bin
 RUN mkdir -p /var/opt/mssql/data && \
     chmod -R g=u /var/opt/mssql /etc/passwd
 
-### Containers should not run as root as a good practice
+# Containers should not run as root as a good practice
 USER 10001
 
-# Default SQL Server TCP/Port
 EXPOSE 1433
 
 VOLUME /var/opt/mssql/data
 
-### user name recognition at runtime w/ an arbitrary uid - for OpenShift deployments
+# user name recognition at runtime w/ an arbitrary uid - for OpenShift deployments
 ENTRYPOINT ["entrypoint.sh"]
 
 CMD sqlservr
